@@ -1,0 +1,21 @@
+{
+  "history": [],
+  "levels": {
+    "easy": { "num_digit": 4, "max_attempts": 10, "total_time": 1200 },
+    "medium": { "num_digit": 6, "max_attempts": 8, "total_time": 900 },
+    "hard": { "num_digit": 8, "max_attempts": 6, "total_time": 50 }
+  },
+  "messages": {
+    "welcome": "Welcome to Mastermind!",
+    "rules": "Try to guess the {num_digit}-number combination within {total_time} minutes!!! Numbers range from 0 to 7.",
+    "start": "Alright, let's begin!",
+    "game_over": "Game over! The correct combination was: ",
+    "correct_guess": "Congratulations! You Win!",
+    "incorrect_guess": "You almost had it, try again",
+    "input": "Enter your guess ({num_digit} numbers, separated by spaces): ",
+    "invalid_input": "Make sure you input {num_digit} numbers between 0 and 7.",
+    "input_level": "Enter difficulty: easy, medium, or hard ",
+    "invalid_level_input": "Invalid difficulty level. Starting on easy",
+    "timeout": "\nTime's up!"
+  }
+}
