@@ -43,7 +43,6 @@ def main():
     # generate random combination
     try:
         combination = get_random_combination(difficulty)
-        print (combination)
     except Exception as e:
         print(f"Error fetching random numbers: {e}")
         sys.exit(1)
@@ -81,9 +80,11 @@ def main():
             print(ve)
             continue
         
+        # get feedback from the users guess
         feedback = calculate_feedback(guess_list, combination, cfg["levels"][difficulty]["num_digit"])
         history.append({"guess": guess_list, "feedback": feedback})
         
+        # check if user won or lost
         if feedback == True:
             update_score(user_data, is_win=True)
             save_user_data(username, user_data)
@@ -95,11 +96,14 @@ def main():
         
         attempts -= 1
     
+        # if no attempts remain end game
         if attempts == 0:
           print(f"\n{cfg["messages"]["game_over"]}{combination}")
           update_score(user_data, is_win=False)
           save_user_data(username, user_data)
-    
+          break
+        
+        # continuously populate guess history
         print("\nGuess History:")
         for entry in history:
           print(f"Guess: {entry["guess"]} | Feedback: {entry["feedback"]}")
