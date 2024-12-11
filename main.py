@@ -5,6 +5,7 @@ import time
 from utils.random_number_api import get_random_combination
 from utils.feedback import calculate_feedback
 from utils.countdown_timer import calculate_timer
+from utils.update_user_data import load_user_data, save_user_data,update_score
 
 # load config file 
 def load_config ():
@@ -17,6 +18,21 @@ cfg = load_config()
 
 def main():
     print(cfg["messages"]["welcome"])
+
+    # ask for username
+    username = input(cfg["messages"]["username"]).strip()
+
+    # check if user exists
+    user_data = load_user_data(username)
+
+    # Generate the appropriate message based on whether the user exists
+    if user_data:  # User data exists
+        print(f"Welcome back {username}! Your current score is {user_data['wins']} wins and {user_data['losses']} losses.")
+    else:  # New user
+        print(f"Welcome {username}! {cfg["messages"]["current_score"].format(wins=cfg["scoreboard"]["wins"], losses=cfg["scoreboard"]["losses"])}")
+        # Initialize new user data
+        user_data = cfg["scoreboard"]
+        save_user_data(username, user_data)
 
     # difficulty level logic
     difficulty = input(cfg["messages"]["input_level"]).lower().strip()
@@ -68,15 +84,21 @@ def main():
         feedback = calculate_feedback(guess_list, combination, cfg["levels"][difficulty]["num_digit"])
         history.append({"guess": guess_list, "feedback": feedback})
         
-        print(f"Feedback: {feedback}")
-        if feedback == f"{cfg["levels"][difficulty]["num_digit"]} correct numbers and {cfg["levels"][difficulty]["num_digit"]} correct locations":
+        if feedback == True:
+            update_score(user_data, is_win=True)
+            save_user_data(username, user_data)
             print(cfg["messages"]["correct_guess"])
             break
+        elif feedback is False:
+            print(cfg["messages"]["incorrect_guess"])
+        else: print(f"Feedback: {feedback}")
         
         attempts -= 1
     
         if attempts == 0:
           print(f"\n{cfg["messages"]["game_over"]}{combination}")
+          update_score(user_data, is_win=False)
+          save_user_data(username, user_data)
     
         print("\nGuess History:")
         for entry in history:
